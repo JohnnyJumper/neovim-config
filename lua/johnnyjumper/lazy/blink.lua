@@ -4,6 +4,7 @@ return {
 		"rafamadriz/friendly-snippets",
 		"onsails/lspkind.nvim",
 		"nvim-web-devicons",
+		"xzbdmw/colorful-menu.nvim",
 	},
 	version = "1.*",
 	---@module 'blink.cmp'
@@ -40,6 +41,14 @@ return {
 				auto_show = false,
 				draw = {
 					components = {
+						label = {
+							text = function(ctx)
+								return require("colorful-menu").blink_components_text(ctx)
+							end,
+							highlight = function(ctx)
+								return require("colorful-menu").blink_components_highlight(ctx)
+							end,
+						},
 						kind_icon = {
 							ellipsis = false,
 							text = function(ctx)
@@ -72,8 +81,8 @@ return {
 					},
 					padding = { 0, 1 },
 					columns = {
-						{ "kind_icon", "label", "label_description", gap = 1 },
-						{ "kind" },
+						{ "kind_icon", "label", "label_description", gap = 2 },
+						{ "kind", gap = 1 },
 					},
 				},
 			},
