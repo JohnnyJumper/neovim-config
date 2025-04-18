@@ -10,11 +10,12 @@ return {
 		"rcarriga/nvim-notify",
 	},
 	config = function()
+		vim.notify = require("notify")
 		require("notify").setup({
 			merge_duplicates = false,
 			top_down = false,
 			render = "default",
-			stages = "fade_in_slide_out",
+			stages = "slide",
 			timeout = 800,
 		})
 
