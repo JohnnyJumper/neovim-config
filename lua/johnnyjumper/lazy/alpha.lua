@@ -1,10 +1,13 @@
 return {
 	"goolord/alpha-nvim",
-	-- dependencies = { 'echasnovski/mini.icons' },
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
+
+		local plugin_count = #require("lazy").plugins()
+		local datetime = os.date("%x %H:%M:%S")
+		local version = vim.version().build
 
 		dashboard.section.header.val = {
 			"                                                      ",
@@ -29,7 +32,18 @@ return {
 			dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
 			dashboard.button("s", "  > Settings", ":e $MYVIMRC | :cd %:p:h | pwd<CR>"),
 			dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+			dashboard.button("p1", "ts-server", ":cd ~/haven/ts-server/ | pwd<CR>"),
+			dashboard.button("p2", "inference", ":cd ~/haven/inference/ | pwd<CR>"),
+			dashboard.button("p3", "beepbopbeep", ":cd ~/haven/beepbopbeep/ | pwd<CR>"),
+			dashboard.button("p4", "dashboard", ":cd ~/haven/dashboard/ | pwd<CR>"),
 		}
+
+		dashboard.section.footer.val = {
+			" Super Neovim with " .. plugin_count .. " plugins loaded ",
+			"      📅 " .. datetime,
+			"              " .. version,
+		}
+
 		alpha.setup(dashboard.opts)
 		vim.cmd([[
       autocmd FileType alpha setlocal nofoldenable
