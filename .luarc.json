@@ -6,6 +6,9 @@
         "describe",
         "before_each",
         "after_each",
-        "_lazygit_toggle"
+        "_lazygit_toggle",
+        "_typecheck_term_toggle",
+        "_eslintAndTypecheck_toggle",
+        "_dual_term_toggle"
     ]
 }
