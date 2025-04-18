@@ -43,6 +43,18 @@ vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
 vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>")
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>")
+vim.keymap.set("n", "<leader>bd", function()
+	local current = vim.fn.bufnr()
+	local closed = 0
+	for _, bufnr in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+		if bufnr.bufnr ~= current then
+			vim.cmd("bdelete! " .. bufnr.bufnr)
+			closed = closed + 1
+		end
+	end
+	vim.notify("Closed " .. closed .. " buffer(s)")
+end, { desc = "Close all buffers except current" })
+
 -- QuickFixList shortcuts
 
 vim.keymap.set("n", "<leader>qfc", function()
