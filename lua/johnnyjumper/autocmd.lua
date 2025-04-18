@@ -50,17 +50,6 @@ autocmd("TextYankPost", {
 	end,
 })
 
-autocmd("BufEnter", {
-	group = TheJohnnyGroup,
-	callback = function()
-		if vim.g.neovide then
-			vim.cmd.colorscheme("catppuccin-macchiato")
-		else
-			vim.cmd.colorscheme("tokyonight-moon")
-		end
-	end,
-})
-
 autocmd("BufWritePre", {
 	group = TheJohnnyGroup,
 	pattern = "*",
