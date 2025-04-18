@@ -55,6 +55,8 @@ vim.keymap.set("n", "<leader>bd", function()
 	vim.notify("Closed " .. closed .. " buffer(s)")
 end, { desc = "Close all buffers except current" })
 
+vim.keymap.set("n", "<leader>bb", "<cmd>edit#<cr>", { desc = "go to last edited buffer" })
+
 -- QuickFixList shortcuts
 
 vim.keymap.set("n", "<leader>qfc", function()
