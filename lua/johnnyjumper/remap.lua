@@ -41,3 +41,22 @@ vim.keymap.set("v", "<leader>jq", "<cmd>Jqit<cr>")
 
 vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
+vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>")
+vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>")
+-- QuickFixList shortcuts
+
+vim.keymap.set("n", "<leader>qfc", function()
+	vim.fn.setqflist({})
+end, { desc = "Send Error to quickfix" })
+
+vim.keymap.set("n", "<leader>qfe", function()
+	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Send Error to quickfix" })
+
+vim.keymap.set("n", "<leader>qfw", function()
+	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.WARN })
+end, { desc = "Send Warnings to quickfix" })
+
+vim.keymap.set("n", "<leader>qfh", function()
+	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.HINT })
+end, { desc = "Send hints to quickfix" })
