@@ -10,4 +10,4 @@ require("oil").setup({
 	},
 })
 
-vim.cmd.colorscheme("rusty")
+vim.cmd.colorscheme("catppuccin")
