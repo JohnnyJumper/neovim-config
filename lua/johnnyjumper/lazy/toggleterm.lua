@@ -49,31 +49,45 @@ return {
 			lazygit:toggle()
 		end
 
+		local typecheck_term, eslint_term
+
 		function _dual_term_toggle()
+			if typecheck_term and eslint_term and typecheck_term:is_open() and eslint_term:is_open() then
+				typecheck_term:close()
+				eslint_term:close()
+				typecheck_term = nil
+				eslint_term = nil
+				return
+			end
+
 			local cwd = vim.fn.getcwd()
 
-			local tc = Terminal:new({
-				cmd = "pnpm typecheck",
-				dir = cwd,
-				hidden = true,
-				direction = "horizontal",
-				auto_scroll = true,
-				close_on_exit = false,
-				display_name = "Typecheck",
-			})
-			tc:toggle(15, "horizontal")
+			if not typecheck_term then
+				typecheck_term = Terminal:new({
+					cmd = "nvm use 22.14.0 && pnpm typecheck",
+					dir = cwd,
+					hidden = true,
+					direction = "horizontal",
+					auto_scroll = true,
+					close_on_exit = false,
+					display_name = "Typecheck",
+				})
+			end
+			typecheck_term:toggle(15, "horizontal")
 
 			vim.cmd("wincmd j")
-			local es = Terminal:new({
-				cmd = "pnpm eslint --quiet",
-				dir = cwd,
-				hidden = true,
-				direction = "vertical",
-				auto_scroll = true,
-				close_on_exit = false,
-				display_name = "ESLint",
-			})
-			es:toggle(15, "horizontal")
+			if not eslint_term then
+				eslint_term = Terminal:new({
+					cmd = "nvm use 22.14.0 && pnpm eslint --quiet",
+					dir = cwd,
+					hidden = true,
+					direction = "vertical",
+					auto_scroll = true,
+					close_on_exit = false,
+					display_name = "ESLint",
+				})
+			end
+			eslint_term:toggle(15, "horizontal")
 			vim.cmd("wincmd k")
 		end
 
