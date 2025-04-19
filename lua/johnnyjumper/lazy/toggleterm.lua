@@ -41,6 +41,9 @@ return {
 				direction = "float",
 				display_name = "lazygit",
 				float_opts = opts["float_opts"],
+				on_open = function(term)
+					vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = term.bufnr, noremap = true, silent = true })
+				end,
 			})
 
 			lazygit:toggle()
