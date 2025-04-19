@@ -32,6 +32,11 @@ return {
 			dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
 			dashboard.button("s", "  > Settings", ":e $MYVIMRC | :cd %:p:h | pwd<CR>"),
 			dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+			{
+				type = "text",
+				val = " ------------------- Projects --------------------",
+				opts = { position = "center" },
+			},
 			dashboard.button("p1", "ts-server", ":cd ~/haven/ts-server/ | pwd<CR>"),
 			dashboard.button("p2", "inference", ":cd ~/haven/inference/ | pwd<CR>"),
 			dashboard.button("p3", "beepbopbeep", ":cd ~/haven/beepbopbeep/ | pwd<CR>"),
