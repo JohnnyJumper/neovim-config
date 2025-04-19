@@ -89,6 +89,7 @@ return {
 			end
 			eslint_term:toggle(15, "horizontal")
 			vim.cmd("wincmd k")
+			vim.cmd("stopinsert")
 		end
 
 		vim.api.nvim_set_keymap("n", "<leader>g/", "<cmd>lua _lazygit_toggle()<cr>", { noremap = true, silent = true })
