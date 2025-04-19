@@ -87,5 +87,24 @@ return {
 		end
 		vim.keymap.set("n", "<leader>t/", dual_ts_toggle, { noremap = true, silent = true })
 
+		local function spec_toggle()
+			local path = vim.api.nvim_buf_get_name(0)
+			if not path:match("%.spec.ts$") then
+				vim.notify("Not a .spec.ts file", vim.log.levels.ERROR)
+				return
+			end
+
+			toggle_term("spec", {
+				cmd = "nvm use 22.14.0 && pnpm test:vitest " .. path,
+				dir = vim.fn.getcwd(),
+				hidden = true,
+				direction = "horizontal",
+				auto_scroll = true,
+				close_on_exit = false,
+				display_name = vim.fn.expand("%:t"),
+			}, 15, "horizontal")
+			vim.cmd("wincmd k")
+		end
+		vim.keymap.set("n", "<leader>tf/", spec_toggle, { noremap = true, silent = true })
 	end,
 }
