@@ -53,7 +53,9 @@ return {
 				dir = vim.fn.getcwd(),
 				direction = "float",
 				display_name = "lazygit",
+				close_on_exit = true,
 				float_opts = opts["float_opts"],
+				start_in_insert = true,
 				on_open = function(term)
 					vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = term.bufnr, noremap = true, silent = true })
 				end,
@@ -63,6 +65,7 @@ return {
 
 		local function dual_ts_toggle()
 			local cwd = vim.fn.getcwd()
+			local current_win = vim.api.nvim_get_current_win()
 			toggle_term("typecheck", {
 				cmd = "nvm use 22.14.0 && pnpm typecheck",
 				dir = cwd,
@@ -82,18 +85,24 @@ return {
 				close_on_exit = false,
 				display_name = "ESLint",
 			}, 15, "horizontal")
-			vim.cmd("wincmd k")
+			vim.api.nvim_set_current_win(current_win)
 			vim.cmd("stopinsert")
 		end
 		vim.keymap.set("n", "<leader>t/", dual_ts_toggle, { noremap = true, silent = true })
 
 		local function spec_toggle()
-			local path = vim.api.nvim_buf_get_name(0)
-			if not path:match("%.spec.ts$") then
-				vim.notify("Not a .spec.ts file", vim.log.levels.ERROR)
+			if state["spec"] and state["spec"]:is_open() then
+				toggle_term("spec")
 				return
 			end
 
+			local path = vim.api.nvim_buf_get_name(0)
+			if not path:match("%.spec.ts$") then
+				vim.notify("Not a .spec.ts file", vim.log.levels.WARN)
+				return
+			end
+
+			local current_win = vim.api.nvim_get_current_win()
 			toggle_term("spec", {
 				cmd = "nvm use 22.14.0 && pnpm test:vitest " .. path,
 				dir = vim.fn.getcwd(),
@@ -103,7 +112,7 @@ return {
 				close_on_exit = false,
 				display_name = vim.fn.expand("%:t"),
 			}, 15, "horizontal")
-			vim.cmd("wincmd k")
+			vim.api.nvim_set_current_win(current_win)
 		end
 		vim.keymap.set("n", "<leader>tf/", spec_toggle, { noremap = true, silent = true })
 	end,
