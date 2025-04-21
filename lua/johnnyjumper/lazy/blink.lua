@@ -5,6 +5,7 @@ return {
 		"onsails/lspkind.nvim",
 		"nvim-web-devicons",
 		"xzbdmw/colorful-menu.nvim",
+		"pretty_hover",
 	},
 	version = "1.*",
 	---@module 'blink.cmp'
@@ -34,7 +35,16 @@ return {
 		-- (Default) Only show the documentation popup when manually triggered
 		completion = {
 			keyword = { range = "full" },
-			documentation = { auto_show = true },
+			documentation = {
+				auto_show = true,
+				draw = function(opts)
+					if opts.item and opts.item.documentation then
+						local out = require("pretty_hover.parser").parse(opts.item.documentation.value)
+						opts.item.documentation.value = out:string()
+					end
+					opts.default_implementation()
+				end,
+			},
 			accept = { auto_brackets = { enabled = true } },
 			ghost_text = { enabled = true },
 			menu = {
