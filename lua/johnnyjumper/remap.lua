@@ -75,4 +75,6 @@ vim.keymap.set("n", "<leader>qfh", function()
 	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.HINT })
 end, { desc = "Send hints to quickfix" })
 
+vim.keymap.set("n", "<leader>qc", "<cmd>:cclose<cr>")
+
 vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
