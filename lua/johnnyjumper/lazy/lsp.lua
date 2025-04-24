@@ -65,6 +65,13 @@ return {
 				header = "",
 				prefix = "",
 			},
+			severity_sort = true,
+			underline = true,
+			signs = true,
+			virtual_text = {
+				prefix = "●",
+				spacing = 4,
+			},
 		})
 	end,
 }
