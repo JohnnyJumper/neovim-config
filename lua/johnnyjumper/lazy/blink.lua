@@ -1,11 +1,12 @@
 return {
 	"saghen/blink.cmp",
 	dependencies = {
+		"Kaiser-Yang/blink-cmp-avante",
 		"rafamadriz/friendly-snippets",
 		"onsails/lspkind.nvim",
-		"nvim-web-devicons",
+		"nvim-tree/nvim-web-devicons",
 		"xzbdmw/colorful-menu.nvim",
-		"pretty_hover",
+		"Fildo7525/pretty_hover",
 	},
 	version = "1.*",
 	---@module 'blink.cmp'
@@ -102,6 +103,13 @@ return {
 		-- elsewhere in your config, without redefining it, due to `opts_extend`
 		sources = {
 			default = { "lsp", "path", "snippets", "buffer" },
+			providers = {
+				avante = {
+					module = "blink-cmp-avante",
+					name = "Avante",
+					opts = {},
+				},
+			},
 		},
 		signature = { enabled = true },
 
