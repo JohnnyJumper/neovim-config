@@ -7,18 +7,6 @@ local yank_group = augroup("HighlightYank", { clear = true })
 local lint_group = augroup("Lint", { clear = true })
 local conform_group = augroup("conform", {})
 
-autocmd({ "RecordingEnter" }, {
-	callback = function()
-		vim.opt.cmdheight = 1
-	end,
-})
-
-autocmd({ "RecordingLeave" }, {
-	callback = function()
-		vim.opt.cmdheight = 0
-	end,
-})
-
 autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 	group = lint_group,
 	callback = function()
