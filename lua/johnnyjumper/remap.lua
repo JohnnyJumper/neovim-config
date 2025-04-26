@@ -39,10 +39,10 @@ vim.keymap.set("n", "s", "<C-w>", { desc = "override s to C-w for window operati
 vim.keymap.set("n", "<leader>xr", "<cmd>Rest run<cr>")
 vim.keymap.set("v", "<leader>jq", "<cmd>Jqit<cr>")
 
-vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
-vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
-vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>")
-vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>")
+vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.goto_next()<cr>zz")
+vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.goto_prev()<cr>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>zz")
+vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>zz")
 vim.keymap.set("n", "<leader>bd", function()
 	local current = vim.fn.bufnr()
 	local closed = 0
@@ -76,5 +76,4 @@ vim.keymap.set("n", "<leader>qfh", function()
 end, { desc = "Send hints to quickfix" })
 
 vim.keymap.set("n", "<leader>qc", "<cmd>:cclose<cr>")
-
 vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
