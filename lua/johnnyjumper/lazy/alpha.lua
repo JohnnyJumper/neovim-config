@@ -49,5 +49,7 @@ return {
 		vim.cmd([[
       autocmd FileType alpha setlocal nofoldenable
     ]])
+
+		vim.keymap.set("n", "<leader><leader>h", "<cmd>Alpha<cr>")
 	end,
 }
