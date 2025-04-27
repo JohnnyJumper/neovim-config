@@ -30,7 +30,9 @@ return {
 	},
 	config = function(_, opts)
 		local toggleterm = require("toggleterm")
-		toggleterm.setup(opts)
+		local float_windblend = vim.g.neovide and 30 or 0
+		local finalOpts = vim.tbl_deep_extend("force", opts, { float_opts = { winblend = float_windblend } })
+		toggleterm.setup(finalOpts)
 		local Terminal = require("toggleterm.terminal").Terminal
 
 		local state = {}
@@ -54,7 +56,6 @@ return {
 				direction = "float",
 				display_name = "lazygit",
 				close_on_exit = true,
-				float_opts = opts["float_opts"],
 				start_in_insert = true,
 				on_open = function(term)
 					vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = term.bufnr, noremap = true, silent = true })
