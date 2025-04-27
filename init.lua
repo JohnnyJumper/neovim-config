@@ -9,6 +9,11 @@ else
 		vim.g.neovide_opacity = 1
 		vim.g.neovide_normal_opacity = 1
 
+		vim.g.neovide_cursor_vfx_mode = "torpedo"
+		vim.g.neovide_cursor_animation_length = 0.150
+		vim.g.neovide_cursor_animate_in_insert_mode = true
+		vim.g.neovide_cursor_trail_size = 1.0
+
 		-- terminal colors took from tokyo-night theme
 		vim.g.terminal_color_0 = "#a1a1a1"
 		vim.g.terminal_color_1 = "#f7768e"
