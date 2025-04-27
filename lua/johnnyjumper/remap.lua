@@ -30,7 +30,7 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Fun command for easy fast and replace
+-- Fun command for easy search and replace
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
@@ -39,8 +39,8 @@ vim.keymap.set("n", "s", "<C-w>", { desc = "override s to C-w for window operati
 vim.keymap.set("n", "<leader>xr", "<cmd>Rest run<cr>")
 vim.keymap.set("v", "<leader>jq", "<cmd>Jqit<cr>")
 
-vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.goto_next()<cr>zz")
-vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.goto_prev()<cr>zz")
+vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<cr>zz")
+vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<cr>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>zz")
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>zz")
 vim.keymap.set("n", "<leader>bd", function()
