@@ -37,10 +37,6 @@ return {
 				val = " ------------------- Projects --------------------",
 				opts = { position = "center" },
 			},
-			dashboard.button("p1", "ts-server", ":cd ~/haven/ts-server/ | pwd<CR>"),
-			dashboard.button("p2", "inference", ":cd ~/haven/inference/ | pwd<CR>"),
-			dashboard.button("p3", "beepbopbeep", ":cd ~/haven/beepbopbeep/ | pwd<CR>"),
-			dashboard.button("p4", "dashboard", ":cd ~/haven/dashboard/ | pwd<CR>"),
 		}
 
 		dashboard.section.footer.val = {
