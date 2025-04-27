@@ -1,5 +1,13 @@
 return {
 	{
+		"https://github.com/sainnhe/sonokai",
+		priority = 1000,
+		config = function()
+			vim.g.sonokai_enable_italic = false
+			vim.g.sonokai_style = "andromeda"
+		end,
+	},
+	{
 		"armannikoyan/rusty",
 		priority = 1000,
 	},

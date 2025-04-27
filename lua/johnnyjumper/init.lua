@@ -10,4 +10,4 @@ require("oil").setup({
 	},
 })
 
-vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("sonokai")
