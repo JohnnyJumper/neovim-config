@@ -63,5 +63,8 @@ return {
 				search = vim.fn.input("Grep > "),
 			})
 		end)
+		vim.keymap.set("n", "<leader>fn", function()
+			vim.cmd("Telescope notify")
+		end)
 	end,
 }
