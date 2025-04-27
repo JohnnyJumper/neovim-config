@@ -45,6 +45,7 @@ return {
 						},
 					},
 					["oa"] = "avante_add_files",
+					["s"] = false,
 				},
 			},
 			filesystem = {
