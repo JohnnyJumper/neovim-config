@@ -34,7 +34,6 @@ local live_multigrep = function(opts)
 				:flatten()
 				:totable()
 
-			vim.print(final)
 			return final
 		end,
 		entry_maker = make_entry.gen_from_vimgrep(opts),
