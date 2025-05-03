@@ -10,3 +10,4 @@ require("oil").setup({
 	},
 })
 vim.cmd.colorscheme("kanagawa")
+require("johnnyjumper.neovide")
