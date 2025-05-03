@@ -10,5 +10,8 @@
         "_typecheck_term_toggle",
         "_eslintAndTypecheck_toggle",
         "_dual_term_toggle"
+    ],
+    "diagnostics.disable": [
+        "missing-fields"
     ]
 }

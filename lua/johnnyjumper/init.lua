@@ -9,5 +9,4 @@ require("oil").setup({
 		show_hidden = true,
 	},
 })
-
-vim.cmd.colorscheme("sonokai")
+vim.cmd.colorscheme("kanagawa")
