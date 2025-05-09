@@ -68,7 +68,7 @@ return {
 			local cwd = vim.fn.getcwd()
 			local current_win = vim.api.nvim_get_current_win()
 			toggle_term("typecheck", {
-				cmd = "nvm use 22.14.0 && pnpm typecheck",
+				cmd = "pnpm typecheck",
 				dir = cwd,
 				hidden = true,
 				direction = "horizontal",
@@ -78,7 +78,7 @@ return {
 			}, 15, "horizontal")
 			vim.cmd("wincmd j")
 			toggle_term("eslint", {
-				cmd = "nvm use 22.14.0 && pnpm eslint --quiet",
+				cmd = "pnpm eslint --quiet",
 				dir = cwd,
 				hidden = true,
 				direction = "vertical",
@@ -103,9 +103,25 @@ return {
 				return
 			end
 
+			local function has_script(script_name)
+				local package_json_path = vim.fn.getcwd() .. "/package.json"
+				if vim.fn.filereadable(package_json_path) == 0 then
+					return false
+				end
+
+				local package_json = vim.fn.json_decode(vim.fn.readfile(package_json_path))
+				return package_json and package_json.scripts and package_json.scripts[script_name] ~= nil
+			end
+			local test_cmd
+			if has_script("test:vitest") then
+				test_cmd = "pnpm test:vitest " .. path
+			else
+				test_cmd = "pnpm test " .. path
+			end
+
 			local current_win = vim.api.nvim_get_current_win()
 			toggle_term("spec", {
-				cmd = "nvm use 22.14.0 && pnpm test:vitest " .. path,
+				cmd = test_cmd,
 				dir = vim.fn.getcwd(),
 				hidden = true,
 				direction = "horizontal",
