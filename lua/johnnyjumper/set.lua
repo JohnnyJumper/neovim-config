@@ -39,3 +39,4 @@ vim.keymap.set("n", "<leader><leader>", function()
 end)
 
 vim.opt.cmdheight = 0
+vim.opt.laststatus = 3
