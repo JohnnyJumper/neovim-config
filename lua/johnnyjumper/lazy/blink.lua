@@ -38,6 +38,7 @@ return {
 			keyword = { range = "full" },
 			documentation = {
 				auto_show = true,
+				auto_show_delay_ms = 150,
 				draw = function(opts)
 					if opts.item and opts.item.documentation then
 						local out = require("pretty_hover.parser").parse(opts.item.documentation.value)
@@ -111,7 +112,7 @@ return {
 				},
 			},
 		},
-		signature = { enabled = true },
+		signature = { enabled = false },
 
 		-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
 		-- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
