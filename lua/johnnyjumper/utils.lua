@@ -1,13 +1,40 @@
 function _G.hoverAndDiagnosticWindow()
-	local contents = {}
 	local hover_params = vim.lsp.util.make_position_params(0, "utf-8")
+	vim.lsp.buf_request_all(0, "textDocument/hover", hover_params, function(results, _)
+		-- Filter errors from results
+		local results1 = {} --- @type table<integer,lsp.Hover>
 
-	vim.lsp.buf_request(0, "textDocument/hover", hover_params, function(_, result, _, _)
-		local hover_lines = {}
-		if result and result.contents then
-			hover_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-			hover_lines = vim.split(table.concat(hover_lines, "\n"), "\n", { trimempty = true })
-			vim.list_extend(contents, hover_lines)
+		for client_id, resp in pairs(results) do
+			local err, result = resp.err, resp.result
+			if err then
+				vim.lsp.log.error(err.code, err.message)
+			elseif result then
+				results1[client_id] = result
+			end
+		end
+
+		local contents = {} --- @type string[]
+		local nresults = #vim.tbl_keys(results1)
+
+		for client_id, result in pairs(results1) do
+			local client = assert(vim.lsp.get_client_by_id(client_id))
+			if nresults > 1 then
+				-- Show client name if there are multiple clients
+				contents[#contents + 1] = string.format("# %s", client.name)
+			end
+			if type(result.contents) == "table" and result.contents.kind == "plaintext" then
+				if #results1 == 1 then
+					contents = vim.split(result.contents.value or "", "\n", { trimempty = true })
+				else
+					-- Surround plaintext with ``` to get correct formatting
+					contents[#contents + 1] = "```"
+					vim.list_extend(contents, vim.split(result.contents.value or "", "\n", { trimempty = true }))
+					contents[#contents + 1] = "```"
+				end
+			else
+				vim.list_extend(contents, vim.lsp.util.convert_input_to_markdown_lines(result.contents))
+			end
+			contents[#contents + 1] = "---"
 		end
 
 		local line_diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
@@ -44,29 +71,10 @@ function _G.hoverAndDiagnosticWindow()
 			border = "rounded",
 			focusable = true,
 			wrap = true,
-			wrap_at = 100,
-			max_width = 100,
+			wrap_at = 300,
+			max_width = 300,
 			focus_id = "pretty-hover-id",
 		})
 		require("pretty_hover.highlight").apply_highlight(out.highlighting, buf)
-
-		-- Explicitly set buffer options to prevent formatting loss
-		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-		vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
-		vim.api.nvim_set_option_value("filetype", "markdown", { buf = buf })
-		vim.api.nvim_set_option_value("readonly", true, { buf = buf })
-
-		local ns = vim.api.nvim_create_namespace("hover_diagnostics")
-		local hl_map = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-		}
-
-		for _, info in ipairs(msg_rows) do
-			local group = hl_map[info.sev] or "DiagnosticInfo"
-			vim.api.nvim_buf_add_highlight(buf, ns, group, info.row, 0, -1)
-		end
 	end)
 end
