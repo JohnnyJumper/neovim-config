@@ -36,6 +36,67 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 vim.keymap.set("n", "s", "<C-w>", { desc = "override s to C-w for window operations" })
 
+-- default amount to resize when no count is given
+local default_step = 25
+
+-- detect whether there are splits around the current window
+local function get_neighbors()
+	local win = vim.api.nvim_get_current_win()
+	local pos = vim.api.nvim_win_get_position(win) -- { row, col }
+	local w = vim.api.nvim_win_get_width(win)
+	local h = vim.api.nvim_win_get_height(win)
+
+	local above, below, left, right = false, false, false, false
+	for _, other in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+		if other ~= win then
+			local p = vim.api.nvim_win_get_position(other)
+			local ow, oh = vim.api.nvim_win_get_width(other), vim.api.nvim_win_get_height(other)
+			if p[2] + ow <= pos[2] then
+				left = true
+			end
+			if p[2] >= pos[2] + w then
+				right = true
+			end
+			if p[1] + oh <= pos[1] then
+				above = true
+			end
+			if p[1] >= pos[1] + h then
+				below = true
+			end
+		end
+	end
+	return above, below, left, right
+end
+
+-- build a “smart” resizer: sign = +1 for grow, -1 for shrink
+local function smart_resize(sign)
+	return function()
+		-- use provided count or fall back to default_step
+		local cnt = vim.v.count > 0 and vim.v.count or default_step
+		local win = vim.api.nvim_get_current_win()
+		local w = vim.api.nvim_win_get_width(win)
+		local h = vim.api.nvim_win_get_height(win)
+		local above, below, left, right = get_neighbors()
+
+		if (above or below) and (left or right) then
+			-- grid: split both ways → move each divider by half
+			local half = math.floor(cnt / 2)
+			local other = cnt - half
+			vim.api.nvim_win_set_width(win, w + sign * half)
+			vim.api.nvim_win_set_height(win, h + sign * other)
+		elseif above or below then
+			-- only horizontal splits → adjust height
+			vim.api.nvim_win_set_height(win, h + sign * cnt)
+		else
+			-- vertical-only (or no other splits) → adjust width
+			vim.api.nvim_win_set_width(win, w + sign * cnt)
+		end
+	end
+end
+
+vim.keymap.set("n", "S<", smart_resize(-1), { noremap = true, silent = true })
+vim.keymap.set("n", "S>", smart_resize(1), { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>xr", "<cmd>Rest run<cr>")
 vim.keymap.set("v", "<leader>jq", "<cmd>Jqit<cr>")
 
