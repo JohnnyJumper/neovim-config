@@ -61,17 +61,18 @@ return {
 						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 						["vim.lsp.util.stylize_markdown"] = true,
 					},
-				},
-				signature = {
-					enabled = false,
-				},
-				messages = {
-					enabled = true,
-					view = "notify",
-					view_error = "notify",
-					view_warn = "notify",
-					view_history = "split",
-					view_search = "virtualtext",
+
+					signature = {
+						enabled = true,
+					},
+					messages = {
+						enabled = true,
+						view = "notify",
+						view_error = "notify",
+						view_warn = "notify",
+						view_history = "split",
+						view_search = "virtualtext",
+					},
 				},
 				popupmenu = {
 					enabled = true,
