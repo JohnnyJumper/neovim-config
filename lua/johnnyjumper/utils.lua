@@ -73,7 +73,7 @@ function _G.hoverAndDiagnosticWindow()
 			wrap = true,
 			wrap_at = 120,
 			max_width = 120,
-			width = 120,
+			width = 60,
 			focus_id = "pretty-hover-id",
 		})
 		require("pretty_hover.highlight").apply_highlight(out.highlighting, buf)

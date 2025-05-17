@@ -24,7 +24,7 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 16
-vim.opt.signcolumn = "yes"
+vim.opt.signcolumn = "no"
 vim.opt.isfname:append("@-@")
 
 vim.opt.foldmethod = "expr"
@@ -32,7 +32,7 @@ vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldtext = ""
 vim.opt.foldlevel = 99
 
-vim.opt.updatetime = 50
+vim.opt.updatetime = 20
 
 vim.keymap.set("n", "<leader><leader>", function()
 	vim.cmd("so")
