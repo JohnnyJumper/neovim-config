@@ -7,7 +7,7 @@ if vim.g.neovide then
 	vim.g.neovide_cursor_animate_in_insert_mode = true
 	vim.g.neovide_cursor_trail_size = 1.0
 
-	vim.o.guifont = "FiraCode Nerd Font:h16"
+	vim.o.guifont = "FiraCode Nerd Font:h15"
 	vim.g.neovide_scale_factor = 1.0
 
 	if vim.g.colors_name ~= "kanagawa" then
