@@ -32,8 +32,12 @@ return {
 						cond = require("noice").api.status.command.has,
 					},
 				},
+				lualine_y = {
+					{ require("recorder").displaySlots },
+				},
 				lualine_z = {
 					{ "%p%%/%L", separator = { right = "" }, left_padding = 2 },
+					{ require("recorder").recordingStatus },
 				},
 			},
 		})
