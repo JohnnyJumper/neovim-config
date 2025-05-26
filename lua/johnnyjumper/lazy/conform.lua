@@ -20,7 +20,7 @@ return {
 				scss = { "prettierd", "prettier" },
 			},
 			format_on_save = {
-				timeout_ms = 500,
+				timeout_ms = 1000,
 				lsp_fallback = true,
 			},
 		})
@@ -29,8 +29,9 @@ return {
 			conform.format({
 				lsp_fallback = true,
 				async = false,
-				timeout_ms = 500,
+				timeout_ms = 1000,
 			})
+			vim.notify("Format is complete")
 		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }
