@@ -22,7 +22,7 @@ return {
 				},
 			},
 			line_num = {
-				enable = true,
+				enable = false,
 				style = {
 					{ fg = "#ffffab" },
 					{ fg = "#c21f30" },
