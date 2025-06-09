@@ -3,14 +3,16 @@ return {
 	event = "VeryLazy",
 	version = false, -- Never set this value to "*"! Never!
 	opts = {
-		provider = "claude",
-		claude = {
-			endpoint = "https://api.anthropic.com",
-			model = "claude-3-7-sonnet-20250219", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-			temperature = 0,
-			max_tokens = 16384, -- Increase this to include reasoning tokens (for reasoning models)
-			--reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+		provides = {
+			claude = {
+				endpoint = "https://api.anthropic.com",
+				model = "claude-3-7-sonnet-20250219", -- your desired model (or use gpt-4o, etc.)
+				timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+				extra_request_body = {
+					max_tokens = 16384,
+					temperature = 0,
+				},
+			},
 		},
 	},
 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
