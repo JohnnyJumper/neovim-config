@@ -1,5 +1,6 @@
 return {
 	"JohnnyJumper/neotypist.nvim",
+	enabled = false,
 	opts = {
 		notify_interval = 60 * 1000, -- one minute
 		high = 80,
