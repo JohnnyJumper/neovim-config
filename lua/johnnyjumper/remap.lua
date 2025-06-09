@@ -102,8 +102,29 @@ vim.keymap.set("n", "S>", smart_resize(1), { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>xr", "<cmd>Rest run<cr>")
 vim.keymap.set("v", "<leader>jq", "<cmd>Jqit<cr>")
 
-vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<cr>zz")
-vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<cr>zz")
+local pos_equal = function(p1, p2)
+	local r1, c1 = unpack(p1)
+	local r2, c2 = unpack(p2)
+	return r1 == r2 and c1 == c2
+end
+
+local goto_error_then_hint = function(count)
+	local pos = vim.api.nvim_win_get_cursor(0)
+	vim.diagnostic.jump({ count = count, severity = vim.diagnostic.severity.ERROR, wrap = true })
+	local pos2 = vim.api.nvim_win_get_cursor(0)
+	if pos_equal(pos, pos2) then
+		vim.diagnostic.jump({ count = count, wrap = true })
+	end
+end
+vim.keymap.set("n", "<M-j>", function()
+	goto_error_then_hint(1)
+end)
+
+vim.keymap.set("n", "<M-k>", function()
+	goto_error_then_hint(-1)
+end)
+-- vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<cr>zz")
+-- vim.keymap.set("n", "<M-k>", "<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<cr>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cnext<cr>zz")
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<cr>zz")
 vim.keymap.set("n", "<leader>bd", function()
