@@ -67,6 +67,8 @@ local function get_neighbors()
 	end
 	return above, below, left, right
 end
+vim.keymap.set("x", "z/", "<C-\\><C-n>`</\\%V", { desc = "Search forward within visual selection" })
+vim.keymap.set("x", "z?", "<C-\\><C-n>`>?\\%V", { desc = "Search backward within visual selection" })
 
 -- build a “smart” resizer: sign = +1 for grow, -1 for shrink
 local function smart_resize(sign)
