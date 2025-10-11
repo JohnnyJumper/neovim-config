@@ -18,6 +18,9 @@ return {
 				yaml = { "yamlfix" },
 				css = { "prettierd", "prettier" },
 				scss = { "prettierd", "prettier" },
+				c = { "clang-format" },
+				cpp = { "clang-format" },
+				arduino = { "clang-format" },
 			},
 			format_on_save = {
 				timeout_ms = 1000,

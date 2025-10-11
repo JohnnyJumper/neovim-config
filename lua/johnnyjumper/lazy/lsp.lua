@@ -2,9 +2,20 @@ return {
 	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		enabled = false,
 		opts = {
 			settings = {
-				tsserver_path = "/home/zurzula/.local/share/pnpm/global/5/.pnpm/typescript@5.7.3/node_modules/typescript/bin/tsserver",
+				-- tsserver_path = "/home/zurzula/.local/share/pnpm/global/5/.pnpm/typescript@5.9.2/node_modules/typescript/bin/tsserver",
+				tsserver_file_preferences = {
+					includeInlayParameterNameHints = "all",
+					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+					includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayEnumMemberValueHints = true,
+				},
 			},
 		},
 	},
@@ -20,69 +31,100 @@ return {
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			-- 	cmd = { vim.loop.os_homedir() .. "/typescript-go/built/local/tsgo", "--lsp", "-stdio" },
-			-- 	filetypes = {
-			-- 		"javascript",
-			-- 		"jacascriptreact",
-			-- 		"javascript.jsx",
-			-- 		"typescript",
-			-- 		"typescriptreact",
-			-- 		"typescript.tsx",
-			-- 	},
-			-- 	root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
-			-- })
+			vim.lsp.config("ts_go_ls", {
+				cmd = { "tsgo", "--lsp", "-stdio" },
+				capabilities = capabilities,
+				filetypes = {
+					"javascript",
+					"jacascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+			})
 
-			-- vim.lsp.enable("ts_go_ls")
-			local function custom_publish_diagnostics(_, result, ctx, config)
-				if not result.diagnostics then
-					return
-				end
-
-				-- Filter out diagnostics with the specific ESLint rule
-				result.diagnostics = vim.tbl_filter(function(diagnostic)
-					return diagnostic.code ~= "@typescript-eslint/no-unused-vars"
-				end, result.diagnostics)
-
-				-- Use the default handler to publish the filtered diagnostics
-				vim.diagnostic.handlers.default[1](_, result, ctx, config)
-			end
+			vim.lsp.enable("ts_go_ls")
 
 			local server_overrides = {
-				eslint = function()
-					require("lspconfig").eslint.setup({
-						capabilities = capabilities,
-						on_attach = function(client, bufnr)
-							client.handlers["textDocument/publishDiagnostics"] = custom_publish_diagnostics
-						end,
-					})
-				end,
-				harper_ls = function()
-					require("lspconfig").harper_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							["harper_ls"] = {
-								linters = {
-									SentenceCapitalization = false,
-									ToDoHyphen = false,
-								},
+				eslint = {
+					capabilities = capabilities,
+					settings = {
+						workingDirectories = { mode = "auto" },
+						experimental = { useFlatConfig = true },
+					},
+				},
+				harper_ls = {
+					capabilities = capabilities,
+					settings = {
+						["harper_ls"] = {
+							linters = {
+								SentenceCapitalization = false,
+								ToDoHyphen = false,
 							},
 						},
-					})
-				end,
-				lua_ls = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.lua_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								runtime = { version = "Lua 5.1" },
-								diagnostics = {
-									globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+					},
+				},
+				lua_ls = {
+					on_init = function(client)
+						if client.workspace_folders then
+							local path = client.workspace_folders[1].name
+							if
+								path ~= vim.fn.stdpath("config")
+								and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+							then
+								return
+							end
+						end
+
+						client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+							runtime = {
+								-- Tell the language server which version of Lua you're using (most
+								-- likely LuaJIT in the case of Neovim)
+								version = "LuaJIT",
+								-- Tell the language server how to find Lua modules same way as Neovim
+								-- (see `:h lua-module-load`)
+								path = {
+									"lua/?.lua",
+									"lua/?/init.lua",
 								},
 							},
-						},
-					})
-				end,
+							-- Make the server aware of Neovim runtime files
+							workspace = {
+								checkThirdParty = false,
+								library = {
+									vim.env.VIMRUNTIME,
+									-- Depending on the usage, you might want to add additional paths
+									-- here.
+									-- '${3rd}/luv/library'
+									-- '${3rd}/busted/library'
+								},
+							},
+						})
+					end,
+
+					capabilities = capabilities,
+					settings = {
+						Lua = {},
+					},
+				},
+
+				arduino_language_server = {
+					cmd = {
+						"arduino-language-server",
+						"-cli",
+						"/home/zurzula/.local/bin/arduino-cli",
+						"-clangd",
+						"/home/zurzula/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
+						"-cli-config",
+						"$HOME/.arduino15/arduino-cli.yaml",
+						"-fqbn",
+						"esp32:esp32:esp32cam",
+					},
+					capabilities = capabilities,
+				},
+				-- lspconfig.clangd.setup(require("esp32").lsp_config())
 			}
 
 			require("mason").setup()
@@ -91,18 +133,17 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"rust_analyzer",
-					-- "ts_ls",
+					"harper_ls",
+					"arduino_language_server",
 				},
 				handlers = {
 					function(server_name)
-						local lspconfig = require("lspconfig")
 						if server_overrides[server_name] then
-							server_overrides[server_name]()
+							vim.lsp.config(server_name, server_overrides[server_name])
 						else
-							lspconfig[server_name].setup({
-								capabilities = capabilities,
-							})
+							vim.lsp.config(server_name, { capabilities = capabilities })
 						end
+						vim.lsp.enable(server_name)
 					end,
 				},
 			})
@@ -113,6 +154,7 @@ return {
 				end
 				return message
 			end
+
 			vim.diagnostic.config({
 				-- update_in_insert = true,
 				float = {
@@ -125,7 +167,7 @@ return {
 				},
 				severity_sort = true,
 				underline = true,
-				signs = true,
+				signs = false,
 				update_in_insert = false,
 				virtual_text = {
 					severity = { max = "WARN" },
@@ -143,7 +185,7 @@ return {
 					end,
 				},
 			})
-			vim.lsp.set_log_level("OFF")
+			vim.lsp.set_log_level("DEBUG")
 		end,
 	},
 }

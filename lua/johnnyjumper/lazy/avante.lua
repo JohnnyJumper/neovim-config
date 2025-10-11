@@ -1,9 +1,11 @@
 return {
 	"yetone/avante.nvim",
 	event = "VeryLazy",
+	enabled = false,
 	version = false, -- Never set this value to "*"! Never!
 	opts = {
-		provides = {
+		provider = "openai",
+		providers = {
 			claude = {
 				endpoint = "https://api.anthropic.com",
 				model = "claude-3-7-sonnet-20250219", -- your desired model (or use gpt-4o, etc.)
@@ -11,6 +13,14 @@ return {
 				extra_request_body = {
 					max_tokens = 16384,
 					temperature = 0,
+				},
+			},
+			openai = {
+				model = "gpt-4.1-mini",
+				timeout = 30000,
+				extra_request_body = {
+					temperature = 0.0,
+					max_tokens = 32000,
 				},
 			},
 		},

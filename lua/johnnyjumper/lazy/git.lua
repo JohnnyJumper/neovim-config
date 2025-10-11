@@ -18,9 +18,9 @@ return {
 		-- or lazy = false. One of both options will work.
 		opts = {
 			enabled = true,
-			message_template = " <summary> • <date> • <author> • <<sha>>",
+			message_template = "<author> • <summary> • <date> • <<sha>>",
 			date_format = "%m-%d-%Y %S",
-			virtual_text_column = 60,
+			virtual_text_column = 20,
 			highlight_group = "Question",
 		},
 	},

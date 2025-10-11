@@ -66,5 +66,8 @@ return {
 		vim.keymap.set("n", "<leader>fn", function()
 			vim.cmd("Telescope notify")
 		end)
+		vim.keymap.set("n", "<leader>fb", function()
+			builtin.buffers()
+		end)
 	end,
 }

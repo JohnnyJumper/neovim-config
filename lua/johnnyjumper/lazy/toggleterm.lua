@@ -124,11 +124,11 @@ return {
 				cmd = test_cmd,
 				dir = vim.fn.getcwd(),
 				hidden = true,
-				direction = "horizontal",
+				direction = "vertical",
 				auto_scroll = true,
 				close_on_exit = false,
 				display_name = vim.fn.expand("%:t"),
-			}, 15, "horizontal")
+			}, 15, "vertical")
 			vim.api.nvim_set_current_win(current_win)
 		end
 		vim.keymap.set("n", "<leader>tf/", spec_toggle, { noremap = true, silent = true })
