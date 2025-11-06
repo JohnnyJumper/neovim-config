@@ -30,24 +30,31 @@ return {
 
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-			vim.lsp.config("ts_go_ls", {
-				cmd = { "tsgo", "--lsp", "-stdio" },
-				capabilities = capabilities,
-				filetypes = {
-					"javascript",
-					"jacascriptreact",
-					"javascript.jsx",
-					"typescript",
-					"typescriptreact",
-					"typescript.tsx",
-				},
-				root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
-			})
-
 			vim.lsp.enable("ts_go_ls")
 
-			local server_overrides = {
+			local function exists(p)
+				return vim.uv.fs_stat(p) ~= nil
+			end
+			local function home_join(rel)
+				return (vim.env.HOME or "~") .. "/" .. rel
+			end
+
+			local servers = {
+				ts_go_ls = {
+					cmd = { "tsgo", "--lsp", "-stdio" },
+					capabilities = capabilities,
+					filetypes = {
+						"javascript",
+						"jacascriptreact",
+						"javascript.jsx",
+						"typescript",
+						"typescriptreact",
+						"typescript.tsx",
+					},
+					root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+					settings = { preferences = { maximumHoverLength = "800" } },
+					enable = true,
+				},
 				eslint = {
 					capabilities = capabilities,
 					settings = {
@@ -58,7 +65,7 @@ return {
 				harper_ls = {
 					capabilities = capabilities,
 					settings = {
-						["harper_ls"] = {
+						["harper-ls"] = {
 							linters = {
 								SentenceCapitalization = false,
 								ToDoHyphen = false,
@@ -68,23 +75,21 @@ return {
 				},
 				lua_ls = {
 					on_init = function(client)
-						if client.workspace_folders then
-							local path = client.workspace_folders[1].name
-							if
-								path ~= vim.fn.stdpath("config")
-								and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-							then
-								return
-							end
+						local wf = client.workspace_folders
+						if not wf or not wf[1] then
+							return
 						end
+						local root = wf[1].name
 
+						if
+							root ~= vim.fn.stdpath("config")
+							and (exists(root .. "/.luarc.json") or exists(root .. "/.luarc.jsonc"))
+						then
+							return
+						end
 						client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
 							runtime = {
-								-- Tell the language server which version of Lua you're using (most
-								-- likely LuaJIT in the case of Neovim)
 								version = "LuaJIT",
-								-- Tell the language server how to find Lua modules same way as Neovim
-								-- (see `:h lua-module-load`)
 								path = {
 									"lua/?.lua",
 									"lua/?/init.lua",
@@ -95,10 +100,6 @@ return {
 								checkThirdParty = false,
 								library = {
 									vim.env.VIMRUNTIME,
-									-- Depending on the usage, you might want to add additional paths
-									-- here.
-									-- '${3rd}/luv/library'
-									-- '${3rd}/busted/library'
 								},
 							},
 						})
@@ -109,22 +110,20 @@ return {
 						Lua = {},
 					},
 				},
-
 				arduino_language_server = {
 					cmd = {
 						"arduino-language-server",
 						"-cli",
-						"/home/zurzula/.local/bin/arduino-cli",
+						home_join(".local/bin/arduino-cli"),
 						"-clangd",
-						"/home/zurzula/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
+						home_join(".espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd"),
 						"-cli-config",
-						"$HOME/.arduino15/arduino-cli.yaml",
+						home_join(".arduino15/arduino-cli.yaml"),
 						"-fqbn",
 						"esp32:esp32:esp32cam",
 					},
 					capabilities = capabilities,
 				},
-				-- lspconfig.clangd.setup(require("esp32").lsp_config())
 			}
 
 			require("mason").setup()
@@ -136,27 +135,20 @@ return {
 					"harper_ls",
 					"arduino_language_server",
 				},
-				handlers = {
-					function(server_name)
-						if server_overrides[server_name] then
-							vim.lsp.config(server_name, server_overrides[server_name])
-						else
-							vim.lsp.config(server_name, { capabilities = capabilities })
-						end
-						vim.lsp.enable(server_name)
-					end,
-				},
 			})
 
-			local function truncate_message(message, max_length)
-				if #message > max_length then
-					return message:sub(1, max_length) .. "..."
+			for server_name, config in pairs(servers) do
+				vim.lsp.config(server_name, config)
+				if config.enable then
+					vim.lsp.enable(server_name)
 				end
-				return message
+			end
+
+			local function trunc(s, n)
+				return (#s > n) and (s:sub(1, n) .. "...") or s
 			end
 
 			vim.diagnostic.config({
-				-- update_in_insert = true,
 				float = {
 					focusable = true,
 					style = "minimal",
@@ -181,11 +173,11 @@ return {
 					line_hl_group = "DiagnosticError",
 					format = function(diagnostic)
 						local max_length = 125
-						return "● " .. truncate_message(diagnostic.message, max_length)
+						return "● " .. trunc(diagnostic.message, max_length)
 					end,
 				},
 			})
-			vim.lsp.set_log_level("DEBUG")
+			vim.lsp.set_log_level("OFF")
 		end,
 	},
 }
