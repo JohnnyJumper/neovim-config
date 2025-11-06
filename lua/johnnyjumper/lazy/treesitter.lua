@@ -47,6 +47,9 @@ return {
 						end
 					end,
 
+					injection = {
+						enable = true,
+					},
 					-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
 					-- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
 					-- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -103,6 +106,14 @@ return {
 				zindex = 20, -- The Z-index of the context window
 				on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
 			})
+		end,
+	},
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("nvim-treesitter.configs").setup({})
+			vim.g.skip_ts_context_commentstring_module = true
 		end,
 	},
 	{
