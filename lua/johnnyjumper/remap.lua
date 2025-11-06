@@ -103,3 +103,24 @@ vim.keymap.set("n", "<leader>qc", "<cmd>:cclose<cr>", { desc = "Close quickfix w
 vim.keymap.set("n", "<leader>qo", "<cmd>:copen<cr>", { desc = "Open quickfix window" })
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
+
+vim.keymap.set("n", "<leader>cc", function()
+	local current = vim.opt.colorcolumn:get()
+	if vim.tbl_contains(current, "80") then
+		vim.opt.colorcolumn = ""
+	else
+		vim.opt.colorcolumn = "80"
+	end
+end, { desc = "Toggle colorcolumn=80" })
+
+vim.keymap.set("n", "<C-g>", function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-g>", true, false, true), "n", false)
+
+	local path = vim.fn.expand("%:.")
+	if path == "" then
+		vim.notify("[No file]", vim.log.levels.WARN)
+		return
+	end
+	vim.fn.setreg("+", path)
+	vim.fn.setreg('"', path)
+end, { desc = "Show file info and copy file path" })
