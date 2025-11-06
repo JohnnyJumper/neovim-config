@@ -9,11 +9,21 @@ return {
 		},
 		config = function(_, opts)
 			local actual_stage = vim.g.neovide and "slide" or "static"
+			local bg_color = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
 			vim.print(actual_stage)
 			vim.tbl_deep_extend("force", opts, {
 				stages = actual_stage,
+				background_colour = bg_color and string.format("#%06x", bg_color) or "#000000",
 			})
 			require("notify").setup(opts)
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				callback = function()
+					local bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+					require("notify").setup({
+						background_colour = bg and string.format("#%06x", bg) or "#000000",
+					})
+				end,
+			})
 			vim.notify = require("notify")
 		end,
 	},
