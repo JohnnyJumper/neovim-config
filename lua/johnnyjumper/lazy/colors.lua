@@ -1,5 +1,8 @@
 return {
 	{
+		"zefei/cake16",
+	},
+	{
 		"rebelot/kanagawa.nvim",
 		priority = 1000,
 		config = function()
@@ -57,7 +60,7 @@ return {
 			vim.g.sonokai_style = "andromeda"
 		end,
 	},
-	{ "catppuccin/nvim", name = "catppuccin" },
+	{ "catppuccin/nvim", name = "catppuccin", opts = { flavor = "latte", integrations = { notify = true } } },
 	{
 		"ellisonleao/gruvbox.nvim",
 		name = "gruvbox",
