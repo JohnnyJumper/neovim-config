@@ -103,11 +103,25 @@ return {
 		-- Default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, due to `opts_extend`
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			default = { "lsp", "path", "snippets", "buffer", "codecompanion" },
+			per_filetype = {
+				sql = { "dadbod", "buffer" },
+			},
 			providers = {
 				avante = {
 					module = "blink-cmp-avante",
 					name = "Avante",
+					opts = {},
+				},
+				codecompanion = {
+					name = "CodeCompanion",
+					module = "codecompanion.providers.completion.blink",
+					enabled = true,
+					opts = {},
+				},
+				dadbod = {
+					name = "Dadbod",
+					module = "vim_dadbod_completion.blink",
 					opts = {},
 				},
 			},

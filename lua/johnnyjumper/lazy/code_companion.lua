@@ -4,6 +4,7 @@ return {
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		"ravitemer/mcphub.nvim",
+		"saghen/blink.cmp",
 	},
 	opts = {
 		paths = {
@@ -15,14 +16,41 @@ return {
 			chat = {
 				adapter = "openai",
 				model = "gpt-5-mini-2025-08-07",
+				opts = {
+					completion_provider = "blink",
+				},
 			},
 			inline = {
 				adapter = "openai",
 				model = "gpt-5-nano-2025-08-07",
+				opts = {
+					completion_provider = "blink",
+				},
 			},
 			cmd = {
 				adapter = "openai",
 				model = "gpt-5-nano-2025-08-07",
+				opts = {
+					completion_provider = "blink",
+				},
+			},
+		},
+		memory = {
+			projectRead = {
+				description = "Memory files for project read",
+				files = {
+					"AGENTS.md",
+					"GEMINI.md",
+					".codecompanion-workspace.json",
+				},
+				enabled = function()
+					return vim.fn.getcwd():find("project-read", 1, true) ~= nil
+				end,
+			},
+			opts = {
+				chat = {
+					enabled = true,
+				},
 			},
 		},
 		adapters = {
