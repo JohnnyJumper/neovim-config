@@ -78,7 +78,7 @@ return {
 			}, 15, "horizontal")
 			vim.cmd("wincmd j")
 			toggle_term("eslint", {
-				cmd = "pnpm eslint --quiet",
+				cmd = "pnpm lint",
 				dir = cwd,
 				hidden = true,
 				direction = "vertical",
@@ -98,9 +98,19 @@ return {
 			end
 
 			local path = vim.api.nvim_buf_get_name(0)
-			if not path:match("%.spec.ts$") then
-				vim.notify("Not a .spec.ts file", vim.log.levels.WARN)
-				return
+			local test_suffixes = { ".test.ts", ".spec.ts" }
+
+			local function has_test_suffix(name)
+				for _, suffix in ipairs(test_suffixes) do
+					if name:sub(-#suffix) == suffix then
+						return true
+					end
+				end
+				return false
+			end
+
+			if has_test_suffix(path) == false then
+				path = ""
 			end
 
 			local function has_script(script_name)
@@ -112,6 +122,7 @@ return {
 				local package_json = vim.fn.json_decode(vim.fn.readfile(package_json_path))
 				return package_json and package_json.scripts and package_json.scripts[script_name] ~= nil
 			end
+
 			local test_cmd
 			if has_script("test:vitest") then
 				test_cmd = "pnpm test:vitest " .. path
