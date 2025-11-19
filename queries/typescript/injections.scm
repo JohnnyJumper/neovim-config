@@ -1,5 +1,27 @@
 ; extends
 
+
+(call_expression
+  function: (member_expression
+    object: (identifier) ; e.g. pool
+    property: (property_identifier) ; e.g. query
+  )
+  arguments: (arguments
+    (call_expression
+      function: (call_expression
+        function: (member_expression
+          object: (identifier) @sql (#eq? @sql "sql")
+          property: (property_identifier)
+        )
+        arguments: (arguments)
+      )
+      arguments: (template_string) @injection.content
+        (#offset! @injection.content 0 1 0 -1)
+        (#set! injection.language "sql")
+    )
+  )
+)
+
 ; variable (with angled quotes)
 ; /* html */ `<html>`
 ; /* sql */ `SELECT * FROM foo`

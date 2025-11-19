@@ -62,7 +62,7 @@ return {
 				end,
 			})
 		end
-		vim.keymap.set("n", "<leader>g/", lazygit_toggle, { noremap = true, silent = true })
+		-- vim.keymap.set("n", "<leader>g/", lazygit_toggle, { noremap = true, silent = true })
 
 		local function dual_ts_toggle()
 			local cwd = vim.fn.getcwd()
