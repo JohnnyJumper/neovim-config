@@ -25,3 +25,7 @@ if vim.g.colors_name == "sonokai" then
 end
 -- ~/.local/share/pnpm/global/5/.pnpm/typescript@5.7.3/node_modules/typescript/lib/typescript.js do not forget to update defaultMaximumTruncationLength
 require("johnnyjumper.neovide")
+
+vim.api.nvim_create_user_command("LspInfo", function()
+	vim.cmd("checkhealth vim.lsp")
+end, {})

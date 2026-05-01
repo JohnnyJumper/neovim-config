@@ -11,6 +11,7 @@ return {
 				javascriptreact = { "prettierd", "prettier" },
 				typescriptreact = { "prettierd", "prettier" },
 				json = { "prettierd", "prettier" },
+				jsonc = { "prettierd", "prettier" },
 				markdown = { "prettierd", "prettier" },
 				lua = { "stylua" },
 				html = { "htmlbeautifier" },

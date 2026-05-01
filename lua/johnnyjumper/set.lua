@@ -51,5 +51,19 @@ local tmp = cache .. "/tmp"
 vim.fn.mkdir(run, "p", "0o700")
 vim.fn.mkdir(run, "p", "0o700")
 
-vim.env.XDG_RUNTIME_DIR = run
+-- vim.env.XDG_RUNTIME_DIR = run
 vim.env.TMPDIR = tmp
+
+vim.g.clipboard = {
+	name = "wl-clipboard",
+	copy = {
+		["+"] = { "wl-copy", "--trim-newline" },
+		["*"] = { "wl-copy", "--trim-newline" },
+	},
+	paste = {
+		["+"] = { "wl-paste", "--no-newline" },
+		["*"] = { "wl-paste", "--no-newline" },
+	},
+	cache_enabled = 1,
+}
+vim.opt.clipboard = "unnamedplus"

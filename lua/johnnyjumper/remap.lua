@@ -56,11 +56,11 @@ local goto_error_then_hint = function(count)
 		vim.diagnostic.jump({ count = count, wrap = true })
 	end
 end
-vim.keymap.set("n", "<M-j>", function()
+vim.keymap.set("n", "<leader>gj", function()
 	goto_error_then_hint(1)
 end)
 
-vim.keymap.set("n", "<M-k>", function()
+vim.keymap.set("n", "<leader>gk", function()
 	goto_error_then_hint(-1)
 end)
 -- vim.keymap.set("n", "<M-j>", "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<cr>zz")

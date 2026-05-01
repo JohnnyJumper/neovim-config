@@ -1,25 +1,5 @@
 return {
 	{
-		"pmizio/typescript-tools.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		enabled = false,
-		opts = {
-			settings = {
-				-- tsserver_path = "/home/zurzula/.local/share/pnpm/global/5/.pnpm/typescript@5.9.2/node_modules/typescript/bin/tsserver",
-				tsserver_file_preferences = {
-					includeInlayParameterNameHints = "all",
-					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayVariableTypeHints = true,
-					includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayEnumMemberValueHints = true,
-				},
-			},
-		},
-	},
-	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"saghen/blink.cmp",
@@ -30,7 +10,6 @@ return {
 
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
-			vim.lsp.enable("ts_go_ls")
 
 			local function exists(p)
 				return vim.uv.fs_stat(p) ~= nil
@@ -39,21 +18,39 @@ return {
 				return (vim.env.HOME or "~") .. "/" .. rel
 			end
 
+			local lspc_util = require("lspconfig.util")
+
 			local servers = {
 				ts_go_ls = {
 					cmd = { "tsgo", "--lsp", "-stdio" },
 					capabilities = capabilities,
 					filetypes = {
 						"javascript",
-						"jacascriptreact",
-						"javascript.jsx",
+						"javascriptreact",
 						"typescript",
 						"typescriptreact",
-						"typescript.tsx",
 					},
 					root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
 					settings = { preferences = { maximumHoverLength = "800" } },
 					enable = true,
+				},
+				qmlls = {
+					capabilities = capabilities,
+					enable = true,
+					cmd = { "qmlls" },
+					filetypes = { "qml", "qmljs" },
+					root_dir = function(bufnr, on_dir)
+						local fname = vim.api.nvim_buf_get_name(bufnr)
+						if fname == "" then
+							return
+						end
+
+						local root = lspc_util.root_pattern(".qmlls.ini", "qmlls.ini", ".git")(fname)
+							or vim.fs.dirname(fname) -- fallback for ~/.config/quickshell/*.qml
+
+						on_dir(root)
+					end,
+					single_file_support = true,
 				},
 				eslint = {
 					capabilities = capabilities,
@@ -131,6 +128,7 @@ return {
 				automatic_installation = true,
 				ensure_installed = {
 					"lua_ls",
+					"stylua",
 					"rust_analyzer",
 					"harper_ls",
 					"arduino_language_server",
@@ -177,7 +175,6 @@ return {
 					end,
 				},
 			})
-			vim.lsp.set_log_level("OFF")
 		end,
 	},
 }

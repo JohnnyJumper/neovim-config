@@ -12,10 +12,10 @@ return {
 			data = vim.fn.stdpath("data") .. "/codecompanion",
 			state = vim.fn.stdpath("state") .. "/codecompanion",
 		},
-		strategies = {
+		interactions = {
 			chat = {
 				adapter = "openai",
-				model = "gpt-5-mini-2025-08-07",
+				model = "gpt-5-mini",
 				opts = {
 					completion_provider = "blink",
 				},
@@ -36,17 +36,6 @@ return {
 			},
 		},
 		memory = {
-			projectRead = {
-				description = "Memory files for project read",
-				files = {
-					"AGENTS.md",
-					"GEMINI.md",
-					".codecompanion-workspace.json",
-				},
-				enabled = function()
-					return vim.fn.getcwd():find("project-read", 1, true) ~= nil
-				end,
-			},
 			opts = {
 				chat = {
 					enabled = true,
@@ -71,7 +60,7 @@ return {
 				width = 95,
 				height = 10,
 				prompt = "Prompt ",
-				provider = "telescope",
+				provider = "snacks",
 				opts = {
 					show_default_actions = true,
 					show_default_prompt_library = true,

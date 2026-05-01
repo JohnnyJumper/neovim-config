@@ -10,7 +10,7 @@ return {
 		config = function(_, opts)
 			local actual_stage = vim.g.neovide and "slide" or "static"
 			local bg_color = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
-			vim.print(actual_stage)
+			-- vim.print(actual_stage)
 			vim.tbl_deep_extend("force", opts, {
 				stages = actual_stage,
 				background_colour = bg_color and string.format("#%06x", bg_color) or "#000000",
