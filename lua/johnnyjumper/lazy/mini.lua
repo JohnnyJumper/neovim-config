@@ -18,22 +18,22 @@ return {
 				},
 				split = {
 					bufnew = false, -- Create blank buffer for new split windows
-					tmux = false, -- Create tmux splits instead of neovim splits
+					tmux = false, -- Create tmux splits instead of Neovim splits
 				},
 				ui = {
-					number = false, -- Display line numbers in the focussed window only
-					relativenumber = true, -- Display relative line numbers in the focussed window only
-					hybridnumber = true, -- Display hybrid line numbers in the focussed window only
-					absolutenumber_unfocussed = false, -- Preserve absolute numbers in the unfocussed windows
+					number = false, -- Display line numbers in the focused window only
+					relativenumber = true, -- Display relative line numbers in the focused window only
+					hybridnumber = true, -- Display hybrid line numbers in the focused window only
+					absolutenumber_unfocussed = false, -- Preserve absolute numbers in the unfocused windows
 
-					cursorline = true, -- Display a cursorline in the focussed window only
-					cursorcolumn = false, -- Display cursorcolumn in the focussed window only
+					cursorline = true, -- Display a cursorline in the focused window only
+					cursorcolumn = false, -- Display cursorcolumn in the focused window only
 					colorcolumn = {
-						enable = false, -- Display colorcolumn in the foccused window only
-						list = "+1", -- Set the comma-saperated list for the colorcolumn
+						enable = false, -- Display colorcolumn in the focused window only
+						list = "+1", -- Set the comma-separated list for the colorcolumn
 					},
-					signcolumn = true, -- Display signcolumn in the focussed window only
-					winhighlight = true, -- Auto highlighting for focussed/unfocussed windows
+					signcolumn = true, -- Display signcolumn in the focused window only
+					winhighlight = true, -- Auto highlighting for focused/unfocused windows
 				},
 			})
 		end,

@@ -20,6 +20,7 @@ return {
 				css = { "prettierd", "prettier" },
 				scss = { "prettierd", "prettier" },
 				c = { "clang-format" },
+
 				cpp = { "clang-format" },
 				arduino = { "clang-format" },
 			},
@@ -35,6 +36,7 @@ return {
 				async = false,
 				timeout_ms = 1000,
 			})
+
 			vim.notify("Format is complete")
 		end, { desc = "Format file or range (in visual mode)" })
 	end,
