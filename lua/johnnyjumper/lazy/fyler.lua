@@ -4,6 +4,17 @@ return {
 	lazy = false,
 
 	opts = {
+
+		hooks = {
+			on_delete = function(path)
+				vim.notify("Deleted: " .. path)
+			end,
+
+			on_rename = function(src, dst)
+				vim.notify("Renamed: " .. src .. " -> " .. dst)
+			end,
+		},
+
 		integrations = {
 			icon = "mini_icons",
 		},
@@ -66,6 +77,20 @@ return {
 					},
 				},
 
+				icon = {
+					directory_collapsed = "",
+					directory_expanded = "",
+					directory_empty = "",
+				},
+
+				indentscope = {
+					enabled = true,
+					markers = {
+						{ "│", "FylerIndentMarker" },
+						{ "└", "FylerIndentMarker" },
+					},
+				},
+
 				mappings = {
 					["q"] = "CloseView",
 					["<CR>"] = "Select",
@@ -109,6 +134,11 @@ return {
 						dir = vim.fs.dirname(bufname)
 					end
 				end
+
+				-- Fyler preserves the finder instance per directory/tab.
+				-- Reset the internal file tree before reopening so it starts fresh.
+				local finder = require("fyler.views.finder").instance(dir)
+				finder:change_root(dir)
 
 				require("fyler").open({
 					dir = dir,
