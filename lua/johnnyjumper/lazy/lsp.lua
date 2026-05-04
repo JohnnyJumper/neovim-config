@@ -10,14 +10,6 @@ return {
 
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-			local function exists(p)
-				return vim.uv.fs_stat(p) ~= nil
-			end
-			local function home_join(rel)
-				return (vim.env.HOME or "~") .. "/" .. rel
-			end
-
 			local lspc_util = require("lspconfig.util")
 
 			local servers = {
@@ -72,18 +64,6 @@ return {
 				},
 				lua_ls = {
 					on_init = function(client)
-						local wf = client.workspace_folders
-						if not wf or not wf[1] then
-							return
-						end
-						local root = wf[1].name
-
-						if
-							root ~= vim.fn.stdpath("config")
-							and (exists(root .. "/.luarc.json") or exists(root .. "/.luarc.jsonc"))
-						then
-							return
-						end
 						client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
 							runtime = {
 								version = "LuaJIT",
@@ -107,20 +87,6 @@ return {
 						Lua = {},
 					},
 				},
-				arduino_language_server = {
-					cmd = {
-						"arduino-language-server",
-						"-cli",
-						home_join(".local/bin/arduino-cli"),
-						"-clangd",
-						home_join(".espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd"),
-						"-cli-config",
-						home_join(".arduino15/arduino-cli.yaml"),
-						"-fqbn",
-						"esp32:esp32:esp32cam",
-					},
-					capabilities = capabilities,
-				},
 			}
 
 			require("mason").setup()
@@ -130,8 +96,6 @@ return {
 					"lua_ls",
 					"stylua",
 					"rust_analyzer",
-					"harper_ls",
-					"arduino_language_server",
 				},
 			})
 
@@ -160,14 +124,14 @@ return {
 				signs = false,
 				update_in_insert = false,
 				virtual_text = {
-					severity = { max = "WARN" },
+					severity = { max = vim.diagnostic.severity.WARN },
 					source = "if_many",
 					prefix = "●",
 					spacing = 8,
 				},
 				virtual_lines = {
 					current_line = true,
-					severity = { min = "ERROR" },
+					severity = { min = vim.diagnostic.severity.ERROR },
 					line_hl_group = "DiagnosticError",
 					format = function(diagnostic)
 						local max_length = 125
