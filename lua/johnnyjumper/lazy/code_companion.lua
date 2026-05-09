@@ -85,9 +85,12 @@ return {
 	config = function(_, opts)
 		require("codecompanion").setup(opts)
 
-		vim.keymap.set({ "n", "v" }, "<leader>acc", function()
-			vim.fn.feedkeys(":CodeCompanion")
-		end, { desc = "Ask code companion", noremap = true, silent = true })
+		vim.keymap.set(
+			{ "n", "v" },
+			"<leader>acc",
+			"<cmd>CodeCompanionActions<cr>",
+			{ desc = "Ask code companion", noremap = true, silent = true }
+		)
 
 		vim.keymap.set(
 			{ "n", "v" },
