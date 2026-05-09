@@ -1,43 +1,59 @@
+-- When adding new theme ensure the lazy is set to false. After installing use
+-- :ThemeList command
 return {
 	{
 		"zefei/cake16",
+		name = "cake16",
+		lazy = false,
 	},
 	{
 		"rebelot/kanagawa.nvim",
+		name = "kanagawa.nvim",
+		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.opt.cmdheight = 0
 			require("kanagawa").setup({
 				compile = true,
 				commentStyle = { italic = false },
 				keywordStyle = { italic = false },
 				statementStyle = { bold = false },
-				undercurl = true,
 				functionStyle = {},
 				typeStyle = {},
+				undercurl = true,
 				transparent = false,
 				dimInactive = false,
 				terminalColors = true,
-				colors = { -- add/modify theme and palette colors
-					palette = {},
-					theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-				},
 				background = {
 					dark = "wave",
 					light = "lotus",
 				},
 				theme = "dragon",
+				colors = {
+					palette = {},
+					theme = {
+						wave = {},
+						lotus = {},
+						dragon = {},
+						all = {},
+					},
+				},
+
 				overrides = function(colors)
 					local theme = colors.theme
-					local makeDiagnosticColor = function(color)
-						local c = require("kanagawa.lib.color")
-						return { fg = color, bg = c(color):blend(theme.ui.bg, 0.95):to_hex() }
+
+					local function make_diagnostic_color(color)
+						local kanagawa_color = require("kanagawa.lib.color")
+						return {
+							fg = color,
+							bg = kanagawa_color(color):blend(theme.ui.bg, 0.95):to_hex(),
+						}
 					end
+
 					return {
-						DiagnosticVirtualTextHint = makeDiagnosticColor(theme.diag.hint),
-						DiagnosticVirtualTextInfo = makeDiagnosticColor(theme.diag.info),
-						DiagnosticVirtualTextWarn = makeDiagnosticColor(theme.diag.warning),
-						DiagnosticVirtualTextError = makeDiagnosticColor(theme.diag.error),
+						DiagnosticVirtualTextHint = make_diagnostic_color(theme.diag.hint),
+						DiagnosticVirtualTextInfo = make_diagnostic_color(theme.diag.info),
+						DiagnosticVirtualTextWarn = make_diagnostic_color(theme.diag.warning),
+						DiagnosticVirtualTextError = make_diagnostic_color(theme.diag.error),
 						NormalFloat = { bg = "none" },
 						FloatBorder = { bg = "none" },
 						FloatTitle = { bg = "none" },
@@ -55,18 +71,35 @@ return {
 	},
 	{
 		"https://github.com/sainnhe/sonokai",
-		config = function()
+		name = "sonokai",
+		lazy = false,
+		priority = 1000,
+		init = function()
 			vim.g.sonokai_enable_italic = false
 			vim.g.sonokai_style = "andromeda"
 		end,
 	},
-	{ "catppuccin/nvim", name = "catppuccin", opts = { flavor = "latte", integrations = { notify = true } } },
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		lazy = false,
+		priority = 1000,
+
+		opts = {
+			flavour = "latte",
+			integrations = {
+				notify = true,
+			},
+		},
+	},
 	{
 		"ellisonleao/gruvbox.nvim",
 		name = "gruvbox",
+		lazy = false,
+		priority = 1000,
 		config = function()
 			require("gruvbox").setup({
-				terminal_colors = true, -- add neovim terminal colors
+				terminal_colors = true,
 				undercurl = true,
 				underline = false,
 				bold = true,
@@ -82,8 +115,8 @@ return {
 				invert_signs = false,
 				invert_tabline = false,
 				invert_intend_guides = false,
-				inverse = true, -- invert background for search, diffs, statuslines and errors
-				contrast = "", -- can be "hard", "soft" or empty string
+				inverse = true,
+				contrast = "",
 				palette_overrides = {},
 				overrides = {},
 				dim_inactive = false,
