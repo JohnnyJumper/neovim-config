@@ -119,20 +119,20 @@ return {
 					header = "",
 					prefix = "",
 				},
+
 				severity_sort = true,
 				underline = true,
 				signs = false,
 				update_in_insert = false,
 				virtual_text = {
-					severity = { max = vim.diagnostic.severity.WARN },
+					severity = { min = vim.diagnostic.severity.WARN },
 					source = "if_many",
 					prefix = "●",
 					spacing = 8,
 				},
 				virtual_lines = {
 					current_line = true,
-					severity = { min = vim.diagnostic.severity.ERROR },
-					line_hl_group = "DiagnosticError",
+					severity = vim.diagnostic.severity.ERROR,
 					format = function(diagnostic)
 						local max_length = 125
 						return "● " .. trunc(diagnostic.message, max_length)

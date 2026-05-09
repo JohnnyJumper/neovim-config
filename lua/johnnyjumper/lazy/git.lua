@@ -20,8 +20,11 @@ return {
 			enabled = true,
 			message_template = "<author> • <summary> • <date> • <<sha>>",
 			date_format = "%m-%d-%Y %S",
-			virtual_text_column = 20,
+			virtual_text_column = 120,
 			highlight_group = "Question",
+			set_extmark_options = {
+				priority = 1,
+			},
 		},
 	},
 	{
