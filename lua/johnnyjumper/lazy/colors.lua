@@ -7,6 +7,11 @@ return {
 		lazy = false,
 	},
 	{
+		"sainnhe/everforest",
+		name = "everforest",
+		lazy = false,
+	},
+	{
 		"rebelot/kanagawa.nvim",
 		name = "kanagawa.nvim",
 		lazy = false,
@@ -74,9 +79,38 @@ return {
 		name = "sonokai",
 		lazy = false,
 		priority = 1000,
+
 		init = function()
 			vim.g.sonokai_enable_italic = false
 			vim.g.sonokai_style = "andromeda"
+		end,
+
+		config = function()
+			local function patch_sonokai()
+				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#99cc33", bg = "NONE" })
+				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#40a6ce", bg = "NONE" })
+				vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { sp = "#40a6ce", undercurl = true })
+				vim.api.nvim_set_hl(0, "DiagnosticVirtualText", { fg = "#99cc33", bg = "NONE" })
+
+				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", {
+					fg = "#fb617e",
+					bg = "NONE",
+					underdouble = true,
+				})
+
+				vim.api.nvim_set_hl(0, "VirtualTextInfo", { fg = "#40a6ce", bg = "NONE" })
+			end
+
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = vim.api.nvim_create_augroup("JohnnySonokaiPatch", { clear = true }),
+				pattern = "sonokai",
+				callback = patch_sonokai,
+			})
+
+			-- Handles the edge case where sonokai is already active before this config runs.
+			if vim.g.colors_name == "sonokai" then
+				patch_sonokai()
+			end
 		end,
 	},
 	{
