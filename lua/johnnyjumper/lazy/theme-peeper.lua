@@ -1,8 +1,5 @@
 return {
-	-- "JohnnyJumper/theme-peeper",
-	dir = vim.fn.expand("~/projects/theme-peeper.nvim"),
-	name = "theme-peeper.nvim",
-	lazy = false,
+	"JohnnyJumper/theme-peeper.nvim",
 	dependencies = {
 		{
 			"folke/snacks.nvim",
@@ -24,8 +21,6 @@ return {
 		picker = "snacks",
 		previewer = "float",
 
-		persist = true,
-
 		preview = {
 			profile = "code",
 			max_height = 24,
@@ -41,5 +36,8 @@ return {
 				preview_max_height = 24,
 			},
 		},
+		apply = function(theme)
+			require("johnnyjumper.theme").apply(theme)
+		end,
 	},
 }

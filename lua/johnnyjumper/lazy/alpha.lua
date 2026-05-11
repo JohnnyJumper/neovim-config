@@ -11,7 +11,7 @@ return {
 		local dashboard = require("alpha.themes.dashboard")
 		local milli = require("milli")
 
-		local splash_name = "dancer"
+		local splash_name = "dancerramp"
 		local splash = milli.load({ splash = splash_name })
 
 		local plugin_count = #require("lazy").plugins()
@@ -25,8 +25,8 @@ return {
 
 		dashboard.section.buttons.val = {
 			dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
-			dashboard.button("f", "  > Find file", ":cd $HOME/Workspace | Telescope find_files<CR>"),
-			dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
+			dashboard.button("f", "  > Find file", ":lua Snacks.picker.files()<CR>"),
+			dashboard.button("r", "  > Recent", ":lua Snacks.picker.recent()<CR>"),
 			dashboard.button(
 				"s",
 				"  > Settings",
