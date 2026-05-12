@@ -53,6 +53,17 @@ return {
 						},
 					})
 				end,
+
+				lmstudio = function()
+					return require("codecompanion.adapters").extend("openai_compatible", {
+						name = "lmstuido",
+						env = {
+							url = "http://localhost:1234",
+							api_key = os.getenv("LMSTUDIO_KEY"),
+							chat_url = "/v1/chat/completions",
+						},
+					})
+				end,
 			},
 		},
 		display = {
