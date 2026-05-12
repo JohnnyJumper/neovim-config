@@ -3,6 +3,7 @@ return {
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 		"amansingh-afk/milli.nvim",
+		"folke/snacks.nvim",
 	},
 	config = function()
 		vim.opt.termguicolors = true
@@ -18,6 +19,38 @@ return {
 		local datetime = os.date("%x %H:%M:%S")
 		local version = vim.version().build
 
+		local projects = require("johnnyjumper.project_picker")
+		local project_button = {
+			type = "button",
+			val = "󰉋  > Projects",
+			on_press = function()
+				projects.pick_project(function(_, path)
+					vim.cmd.cd(vim.fn.fnameescape(path))
+					vim.notify("cwd: " .. vim.fn.getcwd())
+					require("snacks").picker.files({ cwd = path })
+				end)
+			end,
+			opts = {
+				position = "center",
+				shortcut = "p",
+				cursor = 3,
+				width = 50,
+				align_shortcut = "right",
+				hl_shortcut = "Keyword",
+			},
+		}
+		project_button.opts.keymap = {
+			"n",
+			"p",
+			"",
+			{
+				noremap = true,
+				silent = true,
+				nowait = true,
+				callback = project_button.on_press,
+			},
+		}
+
 		-- Important:
 		-- Alpha must render the first frame first.
 		-- milli.nvim then finds this frame and animates over it.
@@ -27,18 +60,13 @@ return {
 			dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
 			dashboard.button("f", "  > Find file", ":lua Snacks.picker.files()<CR>"),
 			dashboard.button("r", "  > Recent", ":lua Snacks.picker.recent()<CR>"),
+			project_button,
 			dashboard.button(
 				"s",
 				"  > Settings",
 				":e $HOME/.config/nvim/lua/johnnyjumper/init.lua | :cd %:p:h | pwd<CR>"
 			),
 			dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
-
-			{
-				type = "text",
-				val = " ------------------- Projects --------------------",
-				opts = { position = "center" },
-			},
 		}
 
 		dashboard.section.footer.val = {
