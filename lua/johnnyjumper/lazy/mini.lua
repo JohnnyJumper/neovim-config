@@ -36,6 +36,24 @@ return {
 					winhighlight = true, -- Auto highlighting for focused/unfocused windows
 				},
 			})
+
+			local focus_disable_group = vim.api.nvim_create_augroup("FocusDisable", { clear = true })
+
+			vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "WinEnter" }, {
+				group = focus_disable_group,
+				callback = function()
+					if vim.bo.filetype == "alpha" then
+						vim.b.focus_disable = true
+
+						-- Clean up anything Focus may have already applied.
+						vim.wo.number = false
+						vim.wo.relativenumber = false
+						vim.wo.cursorline = false
+						vim.wo.signcolumn = "no"
+					end
+				end,
+				desc = "Disable focus.nvim for alpha dashboard",
+			})
 		end,
 	},
 	{
