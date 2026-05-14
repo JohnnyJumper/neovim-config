@@ -15,6 +15,14 @@ return {
 				return vim.tbl_contains(t, value)
 			end
 
+			local required = { "http" }
+
+			for _, lang in ipairs(required) do
+				if not contains(ts.get_installed(), lang) and contains(ts.get_available(), lang) then
+					ts.install({ lang })
+				end
+			end
+
 			local function get_supported_lang(ft)
 				if ft == "" then
 					return nil
