@@ -19,7 +19,7 @@ return {
 		local datetime = os.date("%x %H:%M:%S")
 		local version = vim.version().build
 
-		local projects = require("johnnyjumper.project_picker")
+		local projects = require("common.project_picker")
 		local project_button = {
 			type = "button",
 			val = "󰉋  > Projects",
@@ -57,16 +57,17 @@ return {
 		dashboard.section.header.val = splash.frames[1]
 
 		dashboard.section.buttons.val = {
-			dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
-			dashboard.button("f", "  > Find file", ":lua Snacks.picker.files()<CR>"),
-			dashboard.button("r", "  > Recent", ":lua Snacks.picker.recent()<CR>"),
+			dashboard.button("e", "  > New file", "<cmd>ene <BAR> startinsert<CR>"),
+			dashboard.button("f", "  > Find file", "<cmd>lua Snacks.picker.files()<CR>"),
+			dashboard.button("r", "  > Recent", "<cmd>lua Snacks.picker.recent()<CR>"),
 			project_button,
+			dashboard.button("s", "  > Settings", "<cmd>e ~/.config/nvim/init.lua | cd %:p:h | pwd<CR>"),
 			dashboard.button(
-				"s",
-				"  > Settings",
-				":e $HOME/.config/nvim/lua/johnnyjumper/init.lua | :cd %:p:h | pwd<CR>"
+				"c",
+				"  > System Config",
+				"<cmd>cd ~/.config | lua Snacks.picker.files({ cwd = vim.fn.getcwd() })<CR>"
 			),
-			dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+			dashboard.button("q", "  > Quit NVIM", "<cmd>qa<CR>"),
 		}
 
 		dashboard.section.footer.val = {
